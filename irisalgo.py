@@ -20,6 +20,7 @@ import math
 '''
 *Variable Definitons
 '''
+DATASET = []
 random.seed(123)
 
 '''
