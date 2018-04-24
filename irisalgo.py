@@ -1,10 +1,25 @@
-"""
-SECTION 1 : Load and setup data for training
-"""
+'''
+*Authors: Edgar Oregel, Clement Garcia
+*Main File: irisalog.py
+*Purpose: The main file with calculations and algo for computing iris dataset
+*Last Updated: 4/24/18
+    @Edgar/@Clement
+    *Starting out
+'''
 
+
+
+'''
+*Imported modules
+'''
 import csv
 import random
 import math
+
+
+'''
+*Global seed for random number generator
+'''
 random.seed(123)
 
 # Load dataset
