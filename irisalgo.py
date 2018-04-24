@@ -118,7 +118,7 @@ for e in xrange(epoch):
 
     cost_total /= len(train_X)
     if(e % 100 == 0):
-        print cost_total
+        print(cost_total)
 
 """
 SECTION 3 : Testing
@@ -132,11 +132,11 @@ for r in res:
     preds.append(max(enumerate(r), key=lambda x:x[1])[0])
 
 # Print prediction
-print preds
+print(preds)
 
 # Calculate accuration
 acc = 0.0
 for i in xrange(len(preds)):
     if preds[i] == int(test_y[i]):
         acc += 1
-print acc / len(preds) * 100, "%"
+print(acc / len(preds) * 100, "%")
