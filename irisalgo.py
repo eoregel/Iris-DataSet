@@ -38,8 +38,6 @@ with open('./dataset.csv') as csvfile:
 '''
 for row in dataset:
     #Item 4 is identifier
-    print(row)
-    print(row[4])
     row[4] = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"].index(row[4])
     row[:4] = [float(row[j]) for j in range(len(row))]
 
