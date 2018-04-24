@@ -22,10 +22,15 @@ import math
 '''
 random.seed(123)
 
-# Load dataset
+'''
+*Read in dataset.csv and save
+'''
 with open('./dataset.csv') as csvfile:
+    #Create a csv reader object to read as csv
     csvreader = csv.reader(csvfile)
-    next(csvreader, None) # skip header
+    #Skip the first line which will be the header
+    next(csvreader, None)
+    #Create a list out of the data and assing to dataset
     dataset = list(csvreader)
 
 # Change string value to numeric
