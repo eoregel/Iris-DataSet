@@ -18,7 +18,7 @@ import math
 
 
 '''
-*Global seed for random number generator
+*Variable Definitons
 '''
 random.seed(123)
 
@@ -41,10 +41,12 @@ for row in dataset:
     row[4] = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"].index(row[4])
     row[:4] = [float(row[identifier]) for identifier in range(len(row))]
 
-# Split x and y (feature and target)
-random.shuffle(dataset)
-datatrain = dataset[:int(len(dataset) * 0.8)]
-datatest = dataset[int(len(dataset) * 0.8):]
+'''
+*Split the feautre and the target in dataset
+'''
+random.shuffle(dataset) #randomize the split
+datatrain = dataset[:int(len(dataset) * 0.8)] #conversion to int and multiplication for final value
+datatest = dataset[int(len(dataset) * 0.8):] # "            "           "            "
 train_X = [data[:4] for data in datatrain]
 train_y = [data[4] for data in datatrain]
 test_X = [data[:4] for data in datatest]
