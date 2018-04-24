@@ -8,7 +8,7 @@ import math
 random.seed(123)
 
 # Load dataset
-with open('/dataset.csv') as csvfile:
+with open('data.csv') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader, None) # skip header
     dataset = list(csvreader)
