@@ -16,7 +16,7 @@ with open('/dataset.csv') as csvfile:
 # Change string value to numeric
 for row in dataset:
     row[4] = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"].index(row[4])
-    row[:4] = [float(row[j]) for j in xrange(len(row))]
+    row[:4] = [float(row[j]) for j in range(len(row))]
 
 # Split x and y (feature and target)
 random.shuffle(dataset)
@@ -40,36 +40,36 @@ best result = 76.67%
 """
 
 def matrix_mul_bias(A, B, bias): # Matrix multiplication (for Testing)
-    C = [[0 for i in xrange(len(B[0]))] for i in xrange(len(A))]    
-    for i in xrange(len(A)):
-        for j in xrange(len(B[0])):
-            for k in xrange(len(B)):
+    C = [[0 for i in range(len(B[0]))] for i in range(len(A))]    
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
                 C[i][j] += A[i][k] * B[k][j]
             C[i][j] += bias[j]
     return C
 
 def vec_mat_bias(A, B, bias): # Vector (A) x matrix (B) multiplication
-    C = [0 for i in xrange(len(B[0]))]
-    for j in xrange(len(B[0])):
-        for k in xrange(len(B)):
+    C = [0 for i in range(len(B[0]))]
+    for j in range(len(B[0])):
+        for k in range(len(B)):
             C[j] += A[k] * B[k][j]
             C[j] += bias[j]
     return C
 
 
 def mat_vec(A, B): # Matrix (A) x vector (B) multipilicatoin (for backprop)
-    C = [0 for i in xrange(len(A))]
-    for i in xrange(len(A)):
-        for j in xrange(len(B)):
+    C = [0 for i in range(len(A))]
+    for i in range(len(A)):
+        for j in range(len(B)):
             C[i] += A[i][j] * B[j]
     return C
 
 def sigmoid(A, deriv=False): 
     if deriv: # derivation of sigmoid (for backprop)
-        for i in xrange(len(A)):
+        for i in range(len(A)):
             A[i] = A[i] * (1 - A[i])
     else:
-        for i in xrange(len(A)):
+        for i in range(len(A)):
             A[i] = 1 / (1 + math.exp(-A[i]))
     return A
 
@@ -79,15 +79,15 @@ epoch = 400
 neuron = [4, 3] # number of neuron each layer
 
 # Initiate weight and bias with 0 value
-weight = [[0 for j in xrange(neuron[1])] for i in xrange(neuron[0])]
-bias = [0 for i in xrange(neuron[1])]
+weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
+bias = [0 for i in range(neuron[1])]
 
 # Initiate weight with random between -1.0 ... 1.0
-for i in xrange(neuron[0]):
-    for j in xrange(neuron[1]):
+for i in range(neuron[0]):
+    for j in range(neuron[1]):
         weight[i][j] = 2 * random.random() - 1
 
-for e in xrange(epoch):
+for e in range(epoch):
     cost_total = 0
     for idx, x in enumerate(train_X): # Update for each data; SGD
         
@@ -101,18 +101,18 @@ for e in xrange(epoch):
 
         # Cost function, Square Root Eror
         eror = 0
-        for i in xrange(3):
+        for i in range(3):
             eror +=  0.5 * (target[i] - X_1[i]) ** 2 
         cost_total += eror
 
         # Backward propagation
         # Update weight_2 and bias_2 (layer 2)
         delta = []
-        for j in xrange(neuron[1]):
+        for j in range(neuron[1]):
             delta.append(-1 * (target[j]-X_1[j]) * X_1[j] * (1-X_1[j]))
 
-        for i in xrange(neuron[0]):
-            for j in xrange(neuron[1]):
+        for i in range(neuron[0]):
+            for j in range(neuron[1]):
                 weight[i][j] -= alfa * (delta[j] * x[i])
                 bias[j] -= alfa * delta[j]
 
@@ -136,7 +136,7 @@ print(preds)
 
 # Calculate accuration
 acc = 0.0
-for i in xrange(len(preds)):
+for i in range(len(preds)):
     if preds[i] == int(test_y[i]):
         acc += 1
 print(acc / len(preds) * 100, "%")
