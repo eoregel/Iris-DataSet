@@ -1,7 +1,3 @@
-"""
-SECTION 1 : Load and setup data for training
-"""
-
 import csv
 import random
 import math
@@ -87,6 +83,7 @@ for i in range(neuron[0]):
     for j in range(neuron[1]):
         weight[i][j] = 2 * random.random() - 1
 
+print("Total Cost:")
 for e in range(epoch):
     cost_total = 0
     for idx, x in enumerate(train_X): # Update for each data; SGD
@@ -132,11 +129,14 @@ for r in res:
     preds.append(max(enumerate(r), key=lambda x:x[1])[0])
 
 # Print prediction
-print(preds)
+print("\nPredictions:")
+for item in preds:
+    print(item)
 
 # Calculate accuration
 acc = 0.0
 for i in range(len(preds)):
     if preds[i] == int(test_y[i]):
         acc += 1
+print("\nAccuracy:")
 print(acc / len(preds) * 100, "%")
