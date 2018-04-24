@@ -39,7 +39,7 @@ with open('./dataset.csv') as csvfile:
 for row in dataset:
     #Item 4 is identifier
     row[4] = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"].index(row[4])
-    row[:4] = [float(row[j]) for j in range(len(row))]
+    row[:4] = [float(row[identifier]) for identifier in range(len(row))]
 
 # Split x and y (feature and target)
 random.shuffle(dataset)
