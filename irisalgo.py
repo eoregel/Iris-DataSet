@@ -91,11 +91,11 @@ def sigmoid(A, deriv=False):
 def divideData(items):
     divided_elements = {}
     i = 0
-    thread_name = "thread"
     amount = items/THREADS
 
-    for x in range(len(THREADS)):
-        thread_name += i
+    for x in range(THREADS):
+        thread_name = "thread"
+        thread_name += str(i)
         divided_elements[thread_name] = amount
         i += 1
     return divided_elements
@@ -117,6 +117,8 @@ def main():
 
     print("Total Cost:")
     elements = divideData(epoch);
+    print(elements)
+    sys.exit()
     for e in range(epoch):
         
         cost_total = 0
