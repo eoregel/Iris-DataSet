@@ -15,7 +15,7 @@
 import csv
 import random
 import math
-import time
+import time as T
 import multiprocessing as MP
 import argparse
 import sys
@@ -121,7 +121,7 @@ def divideData(items):
     return divided_elements, thread_names
 
 
-def computationalFunction(alfa, epoch, neuron, weight, bias, x, y):
+def computationalFunction(alfa, epoch, neuron, weight, bias, x, y, thread, start_time, thread_times):
     for e in range(x, y):
         cost_total = 0
         for idx, x in enumerate(train_X):
@@ -143,26 +143,31 @@ def computationalFunction(alfa, epoch, neuron, weight, bias, x, y):
                     bias[j] -= alfa * delta[j]
 
         cost_total /= len(train_X)
-        if(e % 100 == 0):
-            print(cost_total)
+        # if(e % 100 == 0):
+        #     print(cost_total)
+    thread_end_time = T.time()
+    thread_end_time = thread_end_time - start_time
+    thread_times.append(thread_end_time)
+    
 
 def main():
     alfa = 0.005
     epoch = 400
     neuron = [4, 3]
-    start_time = [];
-    end_time = [];
 
-    start = time.time()
+    start = T.time()
     weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
     bias = [0 for i in range(neuron[1])]
     for i in range(neuron[0]):
         for j in range(neuron[1]):
             weight[i][j] = 2 * random.random() - 1
 
-    print("Total Cost:")
+    
     elements, thread_names = divideData(epoch);
-    print(elements)
+
+    thread_times = []
+
+    thread_processes = []
 
     first = True
     for thread in thread_names:
@@ -172,8 +177,10 @@ def main():
         else:
             x = elements[thread]
             y = elements[thread] + elements[thread]
-
-        thread = MP.Process(target=computationalFunction, args=(alfa, epoch, neuron, weight, bias, x, y))
+        thread_start_time = T.time()
+        thread = MP.Process(target=computationalFunction, args=(alfa, epoch, neuron, weight, bias, x, y, thread, thread_start_time, thread_times))
+        thread_processes.append(thread)
+        thread.start()
     # for e in range(epoch):
     #     cost_total = 0
     #     for idx, x in enumerate(train_X):
@@ -197,10 +204,15 @@ def main():
     #     cost_total /= len(train_X)
     #     if(e % 100 == 0):
     #         print(cost_total)
-    stop = time.time()
+    # for thread in thread_processes:
+    #     thread.join()
+    stop = T.time()
     elapsed = stop - start
     print("\nTotal Time Elapsed:")
     print(str(elapsed) + " sec")
+    # print("\nTotal Time Elapsed Per Thead: ")
+    # for i in range(len(thread_times)):
+    #     print(thread_names[i] + " time: " + thread_times[i])
     res = matrix_mul_bias(test_X, weight, bias)
 
     # Get prediction
