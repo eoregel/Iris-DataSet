@@ -16,7 +16,7 @@ import csv
 import random
 import math
 import time
-
+import multiprocessing
 
 '''
 *Global seed for random number generator
@@ -43,7 +43,6 @@ train_y = [data[4] for data in datatrain]
 test_X = [data[:4] for data in datatest]
 test_y = [data[4] for data in datatest]
 
-start = time.time()
 # Matrix multiplication 
 def matrix_mul_bias(A, B, bias): 
     C = [[0 for i in range(len(B[0]))] for i in range(len(A))]    
@@ -82,6 +81,7 @@ alfa = 0.005
 epoch = 400
 neuron = [4, 3]
 
+start = time.time()
 weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
 bias = [0 for i in range(neuron[1])]
 for i in range(neuron[0]):
@@ -135,3 +135,6 @@ for i in range(len(preds)):
         acc += 1
 print("\nAccuracy:")
 print(acc / len(preds) * 100, "%")
+
+if __name__ = "__main__":
+    p = Pool(5)
