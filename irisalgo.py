@@ -17,11 +17,20 @@ import random
 import math
 import time
 import multiprocessing as MP
+import argparse
+import sys
 
 '''
 *Global seed for random number generator
 '''
 random.seed(123)
+parser = argparse.ArgumentParser()
+
+
+#Handle arguments
+parser.add_argument("-t", help="number of threads", type=int)
+args = parser.parse_args()
+THREADS = args.t
 
 # Load dataset
 with open('dataset.csv') as csvfile:
@@ -78,6 +87,20 @@ def sigmoid(A, deriv=False):
             A[i] = 1 / (1 + math.exp(-A[i]))
     return A
 
+#divide the data equally between the threads
+def divideData(items):
+    divided_elements = {}
+    i = 0
+    thread_name = "thread"
+    amount = items/THREADS
+
+    for x in range(len(THREADS)):
+        thread_name += i
+        divided_elements[thread_name] = amount
+        i += 1
+    return divided_elements
+
+
 def main():
     alfa = 0.005
     epoch = 400
@@ -93,8 +116,9 @@ def main():
             weight[i][j] = 2 * random.random() - 1
 
     print("Total Cost:")
-    divideData(epoch);
+    elements = divideData(epoch);
     for e in range(epoch):
+        
         cost_total = 0
         for idx, x in enumerate(train_X):
             h_1 = vec_mat_bias(x, weight, bias)
