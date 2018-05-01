@@ -16,7 +16,7 @@ import csv
 import random
 import math
 import time
-import multiprocessing
+import multiprocessing as MP
 
 '''
 *Global seed for random number generator
@@ -77,64 +77,67 @@ def sigmoid(A, deriv=False):
         for i in range(len(A)):
             A[i] = 1 / (1 + math.exp(-A[i]))
     return A
-alfa = 0.005
-epoch = 400
-neuron = [4, 3]
 
-start = time.time()
-weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
-bias = [0 for i in range(neuron[1])]
-for i in range(neuron[0]):
-    for j in range(neuron[1]):
-        weight[i][j] = 2 * random.random() - 1
+def main():
+    alfa = 0.005
+    epoch = 400
+    neuron = [4, 3]
 
-print("Total Cost:")
-for e in range(epoch):
-    cost_total = 0
-    for idx, x in enumerate(train_X):
-        h_1 = vec_mat_bias(x, weight, bias)
-        X_1 = sigmoid(h_1)
-        target = [0, 0, 0]
-        target[int(train_y[idx])] = 1
-        eror = 0
-        for i in range(3):
-            eror +=  0.5 * (target[i] - X_1[i]) ** 2 
-        cost_total += eror
-        delta = []
+    start = time.time()
+    weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
+    bias = [0 for i in range(neuron[1])]
+    for i in range(neuron[0]):
         for j in range(neuron[1]):
-            delta.append(-1 * (target[j]-X_1[j]) * X_1[j] * (1-X_1[j]))
+            weight[i][j] = 2 * random.random() - 1
 
-        for i in range(neuron[0]):
+    print("Total Cost:")
+    for e in range(epoch):
+        cost_total = 0
+        for idx, x in enumerate(train_X):
+            h_1 = vec_mat_bias(x, weight, bias)
+            X_1 = sigmoid(h_1)
+            target = [0, 0, 0]
+            target[int(train_y[idx])] = 1
+            eror = 0
+            for i in range(3):
+                eror +=  0.5 * (target[i] - X_1[i]) ** 2 
+            cost_total += eror
+            delta = []
             for j in range(neuron[1]):
-                weight[i][j] -= alfa * (delta[j] * x[i])
-                bias[j] -= alfa * delta[j]
+                delta.append(-1 * (target[j]-X_1[j]) * X_1[j] * (1-X_1[j]))
 
-    cost_total /= len(train_X)
-    if(e % 100 == 0):
-        print(cost_total)
-stop = time.time()
-elapsed = stop - start
-print("\nTotal Time Elapsed:")
-print(str(elapsed) + " sec")
-res = matrix_mul_bias(test_X, weight, bias)
+            for i in range(neuron[0]):
+                for j in range(neuron[1]):
+                    weight[i][j] -= alfa * (delta[j] * x[i])
+                    bias[j] -= alfa * delta[j]
 
-# Get prediction
-preds = []
-for r in res:
-    preds.append(max(enumerate(r), key=lambda x:x[1])[0])
+        cost_total /= len(train_X)
+        if(e % 100 == 0):
+            print(cost_total)
+    stop = time.time()
+    elapsed = stop - start
+    print("\nTotal Time Elapsed:")
+    print(str(elapsed) + " sec")
+    res = matrix_mul_bias(test_X, weight, bias)
 
-# Print prediction
-print("\nPredictions:")
-for item in preds:
-    print(item)
+    # Get prediction
+    preds = []
+    for r in res:
+        preds.append(max(enumerate(r), key=lambda x:x[1])[0])
 
-# Calculate accuration
-acc = 0.0
-for i in range(len(preds)):
-    if preds[i] == int(test_y[i]):
-        acc += 1
-print("\nAccuracy:")
-print(acc / len(preds) * 100, "%")
+    # Print prediction
+    print("\nPredictions:")
+    for item in preds:
+        print(item)
 
-if __name__ = "__main__":
-    p = Pool(5)
+    # Calculate accuration
+    acc = 0.0
+    for i in range(len(preds)):
+        if preds[i] == int(test_y[i]):
+            acc += 1
+    print("\nAccuracy:")
+    print(str(acc / len(preds) * 100) + "%")
+
+if __name__ == "__main__":
+    p = MP.Pool(5)
+    main()
