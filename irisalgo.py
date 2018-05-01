@@ -94,6 +94,8 @@ def divideData(items):
     amount = items/THREADS
     not_even = False
     not_even_total = 0
+    total = 0
+    thread_names = []
 
     #check for decimals to round 
     if not type(amount) != "integer":
@@ -103,38 +105,24 @@ def divideData(items):
     for x in range(THREADS):
         thread_name = "thread"
         thread_name += str(i)
+        thread_names.append(thread_name)
 
         if not_even:
             not_even_total += temp_amount
             if (not_even_total + temp_amount) > len(items):
                 temp_amount = len(items) - temp_amount
-            divided_elements[thread_name] = temp_amount
+                divided_elements[thread_name] = temp_amount
+            else:
+                divided_elements[thread_name] = not_even_total
         else:
-            divided_elements[thread_name] = amount
+            total += amount
+            divided_elements[thread_name] = total
         i += 1
-    return divided_elements
+    return divided_elements, thread_names
 
 
-def main():
-    alfa = 0.005
-    epoch = 400
-    neuron = [4, 3]
-    start_time = [];
-    end_time = [];
-
-    start = time.time()
-    weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
-    bias = [0 for i in range(neuron[1])]
-    for i in range(neuron[0]):
-        for j in range(neuron[1]):
-            weight[i][j] = 2 * random.random() - 1
-
-    print("Total Cost:")
-    elements = divideData(epoch);
-    print(elements)
-    sys.exit()
-    for e in range(epoch):
-        
+def computationalFunction(alfa, epoch, neuron, weight, bias, x, y):
+    for e in range(x, y):
         cost_total = 0
         for idx, x in enumerate(train_X):
             h_1 = vec_mat_bias(x, weight, bias)
@@ -157,6 +145,58 @@ def main():
         cost_total /= len(train_X)
         if(e % 100 == 0):
             print(cost_total)
+
+def main():
+    alfa = 0.005
+    epoch = 400
+    neuron = [4, 3]
+    start_time = [];
+    end_time = [];
+
+    start = time.time()
+    weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
+    bias = [0 for i in range(neuron[1])]
+    for i in range(neuron[0]):
+        for j in range(neuron[1]):
+            weight[i][j] = 2 * random.random() - 1
+
+    print("Total Cost:")
+    elements, thread_names = divideData(epoch);
+    print(elements)
+
+    first = True
+    for thread in thread_names:
+        if first:
+            x = 0
+            y = elements[thread]
+        else:
+            x = elements[thread]
+            y = elements[thread] + elements[thread]
+
+        thread = MP.Process(target=computationalFunction, args=(alfa, epoch, neuron, weight, bias, x, y))
+    # for e in range(epoch):
+    #     cost_total = 0
+    #     for idx, x in enumerate(train_X):
+    #         h_1 = vec_mat_bias(x, weight, bias)
+    #         X_1 = sigmoid(h_1)
+    #         target = [0, 0, 0]
+    #         target[int(train_y[idx])] = 1
+    #         eror = 0
+    #         for i in range(3):
+    #             eror +=  0.5 * (target[i] - X_1[i]) ** 2 
+    #         cost_total += eror
+    #         delta = []
+    #         for j in range(neuron[1]):
+    #             delta.append(-1 * (target[j]-X_1[j]) * X_1[j] * (1-X_1[j]))
+
+    #         for i in range(neuron[0]):
+    #             for j in range(neuron[1]):
+    #                 weight[i][j] -= alfa * (delta[j] * x[i])
+    #                 bias[j] -= alfa * delta[j]
+
+    #     cost_total /= len(train_X)
+    #     if(e % 100 == 0):
+    #         print(cost_total)
     stop = time.time()
     elapsed = stop - start
     print("\nTotal Time Elapsed:")
