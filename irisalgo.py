@@ -30,6 +30,9 @@ parser = argparse.ArgumentParser()
 #Handle arguments
 parser.add_argument("-t", help="number of threads", type=int)
 args = parser.parse_args()
+if not args.t:
+    parser.error("Missing thread count, -t <count>")
+    sys.exit()
 THREADS = args.t
 
 # Load dataset

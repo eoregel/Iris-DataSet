@@ -24,7 +24,12 @@ parser = argparse.ArgumentParser()
 #Handle arguments
 parser.add_argument("-t", help="number of threads", type=int)
 args = parser.parse_args()
+if not args.t:
+    parser.error("Missing thread count, -t <count>")
+    sys.exit()
 THREADS = args.t
+print(THREADS)
+sys.exit()
 
 # Load dataset
 with open('dataset.csv') as csvfile:
@@ -113,7 +118,7 @@ def divideData(items):
         i += 1
     return divided_elements, thread_names
 
-def computationalFunction():    
+def computationalFunction(alfa, epoch, neuron, weight, bias, x, y, thread, thread_start_time, thread_times):    
     for e in range(epoch):
         cost_total = 0
         for idx, x in enumerate(train_X): 
@@ -169,6 +174,7 @@ def main():
             weight_2[i][j] = 2 * random.random() - 1
 
     elements, thread_names = divideData(epoch);
+    thread_times = []
 
     thread_processes = []
 
