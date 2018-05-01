@@ -10,12 +10,21 @@
 import csv
 import random
 import math
-import time
+import time as T
+import multiprocessing as MP
+import argparse
+import sys
 
 '''
 *Global seed for random number generator
 '''
 random.seed(123)
+parser = argparse.ArgumentParser()
+
+#Handle arguments
+parser.add_argument("-t", help="number of threads", type=int)
+args = parser.parse_args()
+THREADS = args.t
 
 # Load dataset
 with open('dataset.csv') as csvfile:
@@ -37,20 +46,7 @@ train_y = [data[4] for data in datatrain]
 test_X = [data[:4] for data in datatest]
 test_y = [data[4] for data in datatest]
 
-"""
-SECTION 2 : Build and Train Model
-Multilayer perceptron model, with one hidden layer.
-input layer : 4 neuron, represents the feature of Iris
-hidden layer : 3 neuron, activation using sigmoid
-output layer : 3 neuron, represents the class of Iris
-optimizer = gradient descent
-loss function = Square ROot Error
-learning rate = 0.005
-epoch = 400
-best result = 96.67%
-"""
-
-start = time.time()
+start = T.time()
 def matrix_mul_bias(A, B, bias): # Matrix multiplication (for Testing)
     C = [[0 for i in range(len(B[0]))] for i in range(len(A))]    
     for i in range(len(A)):
@@ -150,7 +146,7 @@ for e in range(epoch):
     cost_total /= len(train_X)
     if(e % 100 == 0):
         print(cost_total)
-stop = time.time()
+stop = T.time()
 elapsed = stop - start
 print("\nTotal Time Elapsed:")
 print(str(elapsed) + " sec")
@@ -177,4 +173,4 @@ for i in range(len(preds)):
     if preds[i] == int(test_y[i]):
         acc += 1
 print("\nAccuracy:")
-print(acc / len(preds) * 100, "%")
+print(str(acc / len(preds) * 100) + "%")
