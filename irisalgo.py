@@ -92,11 +92,25 @@ def divideData(items):
     divided_elements = {}
     i = 0
     amount = items/THREADS
+    not_even = False
+    not_even_total = 0
+
+    #check for decimals to round 
+    if not type(amount) != "integer":
+        temp_amount = math.ceil(amount)
+        not_even = True
 
     for x in range(THREADS):
         thread_name = "thread"
         thread_name += str(i)
-        divided_elements[thread_name] = amount
+
+        if not_even:
+            not_even_total += temp_amount
+            if (not_even_total + temp_amount) > len(items):
+                temp_amount = len(items) - temp_amount
+            divided_elements[thread_name] = temp_amount
+        else:
+            divided_elements[thread_name] = amount
         i += 1
     return divided_elements
 
