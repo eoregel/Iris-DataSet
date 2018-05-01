@@ -80,7 +80,40 @@ def sigmoid(A, deriv=False):
             A[i] = 1 / (1 + math.exp(-A[i]))
     return A
 
+#divide the data equally between the threads
+def divideData(items):
+    divided_elements = {}
+    i = 0
+    amount = items/THREADS
+    not_even = False
+    not_even_total = 0
+    total = 0
+    thread_names = []
 
+    #check for decimals to round 
+    if not type(amount) != "integer":
+        temp_amount = math.ceil(amount)
+        not_even = True
+
+    for x in range(THREADS):
+        thread_name = "thread"
+        thread_name += str(i)
+        thread_names.append(thread_name)
+
+        if not_even:
+            not_even_total += temp_amount
+            if (not_even_total + temp_amount) > len(items):
+                temp_amount = len(items) - temp_amount
+                divided_elements[thread_name] = temp_amount
+            else:
+                divided_elements[thread_name] = not_even_total
+        else:
+            total += amount
+            divided_elements[thread_name] = total
+        i += 1
+    return divided_elements, thread_names
+
+    
 alfa = 0.005
 epoch = 400
 neuron = [4, 4, 3] 
