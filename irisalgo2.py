@@ -28,8 +28,6 @@ if not args.t:
     parser.error("Missing thread count, -t <count>")
     sys.exit()
 THREADS = args.t
-print(THREADS)
-sys.exit()
 
 # Load dataset
 with open('dataset.csv') as csvfile:
@@ -118,7 +116,7 @@ def divideData(items):
         i += 1
     return divided_elements, thread_names
 
-def computationalFunction(alfa, epoch, neuron, weight, bias, x, y, thread, thread_start_time, thread_times):    
+def computationalFunction(alfa, epoch, neuron, weight, weight_2, bias, bias_2, x, y, thread, thread_start_time, thread_times):    
     for e in range(epoch):
         cost_total = 0
         for idx, x in enumerate(train_X): 
@@ -150,8 +148,8 @@ def computationalFunction(alfa, epoch, neuron, weight, bias, x, y, thread, threa
                     bias[j] -= alfa * delta_1[j]
         
         cost_total /= len(train_X)
-        if(e % 100 == 0):
-            print(cost_total)
+        # if(e % 100 == 0):
+        #     print(cost_total)
 
 
 
@@ -186,9 +184,9 @@ def main():
             y = elements[thread]
         else:
             x = elements[thread]
-            y = elements[thread] + elements[thread]
+            y = elements[thread] + elements['thread0']
         thread_start_time = T.time()
-        thread = MP.Process(target=computationalFunction, args=(alfa, epoch, neuron, weight, bias, x, y, thread, thread_start_time, thread_times))
+        thread = MP.Process(target=computationalFunction, args=(alfa, epoch, neuron, weight, weight_2, bias, bias_2, x, y, thread, thread_start_time, thread_times))
         thread_processes.append(thread)
         thread.start()
 
