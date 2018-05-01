@@ -15,6 +15,7 @@
 import csv
 import random
 import math
+import time
 
 
 '''
@@ -54,6 +55,7 @@ epoch = 400
 best result = 76.67%
 """
 
+start = time.time()
 def matrix_mul_bias(A, B, bias): # Matrix multiplication (for Testing)
     C = [[0 for i in range(len(B[0]))] for i in range(len(A))]    
     for i in range(len(A)):
@@ -135,7 +137,10 @@ for e in range(epoch):
     cost_total /= len(train_X)
     if(e % 100 == 0):
         print(cost_total)
-
+stop = time.time()
+elapsed = stop - start
+print("\nTotal Time Elapsed:")
+print(str(elapsed) + " sec")
 """
 SECTION 3 : Testing
 """
