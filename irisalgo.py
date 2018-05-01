@@ -82,6 +82,8 @@ def main():
     alfa = 0.005
     epoch = 400
     neuron = [4, 3]
+    start_time = [];
+    end_time = [];
 
     start = time.time()
     weight = [[0 for j in range(neuron[1])] for i in range(neuron[0])]
@@ -91,6 +93,7 @@ def main():
             weight[i][j] = 2 * random.random() - 1
 
     print("Total Cost:")
+    divideData(epoch);
     for e in range(epoch):
         cost_total = 0
         for idx, x in enumerate(train_X):
