@@ -25,6 +25,7 @@ import sys
 '''
 random.seed(123)
 parser = argparse.ArgumentParser()
+preds = []
 
 
 #Handle arguments
@@ -46,6 +47,7 @@ for row in dataset:
     row[4] = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"].index(row[4])
     row[:4] = [float(row[j]) for j in range(len(row))]
 
+
 # Split x and y (feature and target)
 random.shuffle(dataset)
 datatrain = dataset[:int(len(dataset) * 0.8)]
@@ -53,7 +55,7 @@ datatest = dataset[int(len(dataset) * 0.8):]
 train_X = [data[:4] for data in datatrain]
 train_y = [data[4] for data in datatrain]
 test_X = [data[:4] for data in datatest]
-test_y = [data[4] for data in datatest]
+test_y = [int(data[4]) for data in datatest]
 
 # Matrix multiplication 
 def matrix_mul_bias(A, B, bias): 
@@ -101,7 +103,7 @@ def divideData(items):
     thread_names = []
 
     #check for decimals to round 
-    if not type(amount) != "integer":
+    if type(amount) != int:
         temp_amount = math.ceil(amount)
         not_even = True
 
@@ -112,8 +114,8 @@ def divideData(items):
 
         if not_even:
             not_even_total += temp_amount
-            if (not_even_total + temp_amount) > len(items):
-                temp_amount = len(items) - temp_amount
+            if (not_even_total + temp_amount) > items:
+                temp_amount = items - temp_amount
                 divided_elements[thread_name] = temp_amount
             else:
                 divided_elements[thread_name] = not_even_total
@@ -166,7 +168,7 @@ def main():
             weight[i][j] = 2 * random.random() - 1
 
     
-    elements, thread_names = divideData(epoch);
+    elements, thread_names = divideData(len(dataset));
 
     thread_times = []
 
@@ -219,9 +221,9 @@ def main():
     res = matrix_mul_bias(test_X, weight, bias)
 
     # Get prediction
-    preds = []
     for r in res:
         preds.append(max(enumerate(r), key=lambda x:x[1])[0])
+        
 
     # Print prediction
     print("\nPredictions:")
@@ -234,6 +236,7 @@ def main():
         if preds[i] == int(test_y[i]):
             acc += 1
     print("\nAccuracy:")
+    print(acc, preds)
     print(str(acc / len(preds) * 100) + "%")
 
 if __name__ == "__main__":
